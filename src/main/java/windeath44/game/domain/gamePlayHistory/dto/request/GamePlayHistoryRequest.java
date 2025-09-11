@@ -34,6 +34,12 @@ public class GamePlayHistoryRequest {
     @Min(value = 0, message = "Great must be at least 0") // Great는 0 이상이어야 합니다
     private long great;
     
+    @Min(value = 0, message = "Good must be at least 0") // Good는 0 이상이어야 합니다
+    private long good;
+    
     @Min(value = 0, message = "Miss must be at least 0") // Miss는 0 이상이어야 합니다
     private long miss;
+
+    @NotNull(message = "state is required") // state
+    private String state;
 }

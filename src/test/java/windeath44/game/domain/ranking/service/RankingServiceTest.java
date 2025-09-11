@@ -7,7 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import windeath44.game.domain.gamePlayHistory.event.GamePlayHistorySavedEvent;
-import windeath44.game.domain.gamePlayHistory.model.RhythmRanking;
+import windeath44.game.domain.ranking.model.RhythmRanking;
 import windeath44.game.domain.gamePlayHistory.repository.RhythmRankingRepository;
 
 import java.util.Optional;
@@ -34,7 +34,7 @@ class RankingServiceTest {
         Float completionRate = 95.5f;
         
         GamePlayHistorySavedEvent event = GamePlayHistorySavedEvent.from(
-            userId, musicId, completionRate, 150L, 80L, 60L, 10L, 0L
+            userId, musicId, completionRate, 150L, 80L, 60L, 10L, 5L, 0L
         );
 
         // when
@@ -55,13 +55,13 @@ class RankingServiceTest {
         
         // 첫 번째 기록
         GamePlayHistorySavedEvent firstEvent = GamePlayHistorySavedEvent.from(
-            userId, musicId, 80.0f, 100L, 50L, 40L, 20L, 10L
+            userId, musicId, 80.0f, 100L, 50L, 40L, 20L, 5L, 10L
         );
         rankingService.handleGamePlayHistorySaved(firstEvent);
 
         // 더 높은 완성도의 두 번째 기록
         GamePlayHistorySavedEvent secondEvent = GamePlayHistorySavedEvent.from(
-            userId, musicId, 95.5f, 150L, 80L, 60L, 10L, 0L
+            userId, musicId, 95.5f, 150L, 80L, 60L, 10L, 5L, 0L
         );
 
         // when
@@ -82,13 +82,13 @@ class RankingServiceTest {
         
         // 첫 번째 기록 (높은 완성도)
         GamePlayHistorySavedEvent firstEvent = GamePlayHistorySavedEvent.from(
-            userId, musicId, 95.5f, 150L, 80L, 60L, 10L, 0L
+            userId, musicId, 95.5f, 150L, 80L, 60L, 10L, 5L, 0L
         );
         rankingService.handleGamePlayHistorySaved(firstEvent);
 
         // 더 낮은 완성도의 두 번째 기록
         GamePlayHistorySavedEvent secondEvent = GamePlayHistorySavedEvent.from(
-            userId, musicId, 80.0f, 100L, 50L, 40L, 20L, 10L
+            userId, musicId, 80.0f, 100L, 50L, 40L, 20L, 5L, 10L
         );
 
         // when
@@ -108,10 +108,10 @@ class RankingServiceTest {
         Long musicId = 100L;
         
         GamePlayHistorySavedEvent event1 = GamePlayHistorySavedEvent.from(
-            userId, musicId, 80.0f, 100L, 50L, 40L, 20L, 10L
+            userId, musicId, 80.0f, 100L, 50L, 40L, 20L, 5L, 10L
         );
         GamePlayHistorySavedEvent event2 = GamePlayHistorySavedEvent.from(
-            userId, musicId, 95.5f, 150L, 80L, 60L, 10L, 0L
+            userId, musicId, 95.5f, 150L, 80L, 60L, 10L, 5L, 0L
         );
 
         // when

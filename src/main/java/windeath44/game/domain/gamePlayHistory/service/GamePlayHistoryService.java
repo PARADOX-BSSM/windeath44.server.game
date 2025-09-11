@@ -41,6 +41,7 @@ public class GamePlayHistoryService {
             request.getPerfectPlus(),
             request.getPerfect(),
             request.getGreat(),
+            request.getGood(),
             request.getMiss()
         );
         
@@ -56,7 +57,7 @@ public class GamePlayHistoryService {
     
     public CursorPage<GamePlayHistoryResponse> getMyGamePlayHistories(Long userId, Long cursorId, int size) {
         Slice<GamePlayHistory> historieSlice = gamePlayHistoryRepository.findByUserIdWithCursor(
-                userId, cursorId, PageRequest.of(0, size));
+                String.valueOf(userId), cursorId, PageRequest.of(0, size));
         List<GamePlayHistoryResponse> historyList = gamePlayHistoryMapper.toResponseList(historieSlice.getContent());
         return CursorPage.from(size, historyList);
     }

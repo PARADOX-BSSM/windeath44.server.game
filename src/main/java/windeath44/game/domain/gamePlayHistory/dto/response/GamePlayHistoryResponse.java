@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import windeath44.game.domain.gamePlayHistory.model.GamePlayHistory;
+import windeath44.game.domain.gamePlayHistory.model.type.GamePlayHistoryState;
 
 import java.time.LocalDateTime;
 
@@ -22,7 +23,10 @@ public class GamePlayHistoryResponse {
     private long perfectPlus;
     private long perfect;
     private long great;
+    private long good;
     private long miss;
+    private String rank;
+    private GamePlayHistoryState state;
     private LocalDateTime playedAt;
 
 }
