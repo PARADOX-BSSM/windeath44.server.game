@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import windeath44.game.domain.gamePlayHistory.event.GamePlayHistorySavedEvent;
 import windeath44.game.domain.ranking.dto.RankingRequest;
 import windeath44.game.domain.ranking.dto.RankingResponse;
+import windeath44.game.domain.ranking.mapper.RhythmRankingMapper;
 import windeath44.game.domain.ranking.model.RhythmRanking;
 import windeath44.game.domain.gamePlayHistory.repository.RhythmRankingRepository;
 import windeath44.game.global.dto.CursorPage;
@@ -24,6 +25,7 @@ import java.util.concurrent.atomic.AtomicLong;
 public class RankingService {
 
     private final RhythmRankingRepository rhythmRankingRepository;
+    private final RhythmRankingMapper rhythmRankingMapper;
 
     @Async
     @EventListener
@@ -41,8 +43,8 @@ public class RankingService {
 
     private void updateExistingRanking(RhythmRanking ranking, GamePlayHistorySavedEvent event) {
         if (ranking.getCompletionRate() < event.completionRate()) {
-            ranking.setCompletionRate(event.completionRate());
-            rhythmRankingRepository.save(ranking);
+            RhythmRanking updatedRanking = rhythmRankingMapper.updateEntity(ranking, event);
+            rhythmRankingRepository.save(updatedRanking);
             log.info("Updated ranking for userId: {}, musicId: {} with completion rate: {}", 
                     event.userId(), event.musicId(), event.completionRate());
         } else {
@@ -52,12 +54,7 @@ public class RankingService {
     }
 
     private void createNewRanking(GamePlayHistorySavedEvent event) {
-        RhythmRanking newRanking = RhythmRanking.builder()
-                .userId(String.valueOf(event.userId()))
-                .musicId(event.musicId())
-                .completionRate(event.completionRate())
-                .build();
-
+        RhythmRanking newRanking = rhythmRankingMapper.toEntity(event);
         rhythmRankingRepository.save(newRanking);
         log.info("Created new ranking for userId: {}, musicId: {} with completion rate: {}", 
                 event.userId(), event.musicId(), event.completionRate());

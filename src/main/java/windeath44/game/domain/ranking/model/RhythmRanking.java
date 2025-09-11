@@ -30,9 +30,6 @@ public class RhythmRanking {
     private Long musicId;
     private float completionRate;
 
-    @CreatedDate
-    private LocalDateTime createdAt;
-
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
