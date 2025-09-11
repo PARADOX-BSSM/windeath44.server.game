@@ -1,12 +1,14 @@
 package windeath44.game.domain.gamePlayHistory.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import windeath44.game.domain.gamePlayHistory.dto.request.GamePlayHistoryRequest;
 import windeath44.game.domain.gamePlayHistory.dto.response.GamePlayHistoryResponse;
+import windeath44.game.domain.gamePlayHistory.event.GamePlayHistorySavedEvent;
 import windeath44.game.domain.gamePlayHistory.exception.NotFoundGamePlayHistoryException;
 import windeath44.game.domain.gamePlayHistory.mapper.GamePlayHistoryMapper;
 import windeath44.game.domain.gamePlayHistory.model.GamePlayHistory;
@@ -24,11 +26,25 @@ public class GamePlayHistoryService {
     
     private final GamePlayHistoryRepository gamePlayHistoryRepository;
     private final GamePlayHistoryMapper gamePlayHistoryMapper;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
     public void saveGamePlayHistory(GamePlayHistoryRequest request, Long userId) {
         GamePlayHistory gamePlayHistory = gamePlayHistoryMapper.toEntity(request, userId);
         gamePlayHistoryRepository.save(gamePlayHistory);
+        
+        GamePlayHistorySavedEvent event = GamePlayHistorySavedEvent.from(
+            userId,
+            request.getMusicId(),
+            request.getCompletionRate(),
+            request.getCombo(),
+            request.getPerfectPlus(),
+            request.getPerfect(),
+            request.getGreat(),
+            request.getMiss()
+        );
+        
+        eventPublisher.publishEvent(event);
     }
 
     @Transactional
