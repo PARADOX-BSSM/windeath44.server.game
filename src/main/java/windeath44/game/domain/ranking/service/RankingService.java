@@ -42,6 +42,9 @@ public class RankingService {
             rhythmRankingRepository.save(updatedRanking);
             log.info("Updated ranking for userId: {}, musicId: {} with completion rate: {}", 
                     event.userId(), event.musicId(), event.completionRate());
+        } else {
+            log.info("Ranking not updated for userId: {}, musicId: {} - current rate {} >= new rate {}", 
+                    event.userId(), event.musicId(), ranking.getCompletionRate(), event.completionRate());
         }
     }
 
