@@ -11,6 +11,10 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(GlobalException.class)
     public ErrorResponse globalExceptionHandler(GlobalException e) {
-
+        log.error("GlobalException occurred: ", e);
+        return ErrorResponse.builder()
+                .message(e.getErrorCode().getMessage())
+                .status(e.getErrorCode().getStatus())
+                .build();
     }
 }

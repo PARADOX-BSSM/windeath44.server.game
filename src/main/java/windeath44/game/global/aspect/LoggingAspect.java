@@ -17,9 +17,9 @@ public class LoggingAspect {
 
     @Pointcut("execution(* windeath44.game.domain.gamePlayHistory.service.*.*(..))")
     public void playHisotryMethodLog() {}
-
-    @Pointcut("execution(* windeath44.game.domain.ranking.service.*.*(..))")
-    public void rankingMethodLog() {}
+//
+//    @Pointcut("execution(* windeath44.game.domain.ranking.service.*.*(..))")
+//    public void rankingMethodLog() {}
 
 
 }
