@@ -29,7 +29,7 @@ public class GamePlayHistoryService {
     private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
-    public void saveGamePlayHistory(GamePlayHistoryRequest request, Long userId) {
+    public void saveGamePlayHistory(GamePlayHistoryRequest request, String userId) {
         GamePlayHistory gamePlayHistory = gamePlayHistoryMapper.toEntity(request, userId);
         gamePlayHistoryRepository.save(gamePlayHistory);
         
@@ -55,7 +55,7 @@ public class GamePlayHistoryService {
         gamePlayHistoryRepository.delete(gamePlayHistory);
     }
     
-    public CursorPage<GamePlayHistoryResponse> getMyGamePlayHistories(Long userId, Long cursorId, int size) {
+    public CursorPage<GamePlayHistoryResponse> getMyGamePlayHistories(String userId, Long cursorId, int size) {
         Slice<GamePlayHistory> historieSlice = gamePlayHistoryRepository.findByUserIdWithCursor(
                 String.valueOf(userId), cursorId, PageRequest.of(0, size));
         List<GamePlayHistoryResponse> historyList = gamePlayHistoryMapper.toResponseList(historieSlice.getContent());

@@ -6,7 +6,7 @@ import java.util.List;
 
 @Builder
 public record CursorPage<T> (
-        List<T> data,
+        List<T> values,
         Boolean hasNext
 ) {
 

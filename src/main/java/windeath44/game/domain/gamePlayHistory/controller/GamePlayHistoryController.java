@@ -18,7 +18,7 @@ public class GamePlayHistoryController {
 
     @PostMapping
     public ResponseEntity<ResponseDto<GamePlayHistoryResponse>> saveGamePlayHistory(
-            @RequestHeader("user-id") Long userId,
+            @RequestHeader("user-id") String userId,
             @Valid @RequestBody GamePlayHistoryRequest request) {
         gamePlayHistoryService.saveGamePlayHistory(request, userId);
         ResponseDto<GamePlayHistoryResponse> responseDto = HttpUtil.success("game play history saved successfully");
@@ -35,7 +35,7 @@ public class GamePlayHistoryController {
 
     @GetMapping("/my")
     public ResponseEntity<ResponseDto<CursorPage<GamePlayHistoryResponse>>> getMyGamePlayHistories(
-            @RequestHeader("user-id") Long userId,
+            @RequestHeader("user-id") String userId,
             @RequestParam(required = false) Long cursor,
             @RequestParam(defaultValue = "10") int size) {
         CursorPage<GamePlayHistoryResponse> response = gamePlayHistoryService.getMyGamePlayHistories(userId, cursor, size);

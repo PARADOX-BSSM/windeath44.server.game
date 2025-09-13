@@ -14,12 +14,14 @@ import java.util.stream.Collectors;
 @Component
 public class GamePlayHistoryMapper {
     
-    public GamePlayHistory toEntity(GamePlayHistoryRequest request, Long userId) {
+    public GamePlayHistory toEntity(GamePlayHistoryRequest request, String userId) {
         String rank = RankCalculator.calculateRank(request.getCompletionRate());
-        GamePlayHistoryState state = GamePlayHistoryState.valueOf(request.getState());
+        GamePlayHistoryState state = (request.getState() == null || request.getState().trim().isEmpty()) 
+            ? null 
+            : GamePlayHistoryState.valueOf(request.getState());
 
         return GamePlayHistory.builder()
-                .userId(String.valueOf(userId))
+                .userId(userId)
                 .musicId(request.getMusicId())
                 .completionRate(request.getCompletionRate())
                 .combo(request.getCombo())
@@ -36,7 +38,7 @@ public class GamePlayHistoryMapper {
     public GamePlayHistoryResponse toResponse(GamePlayHistory entity) {
         return GamePlayHistoryResponse.builder()
                 .gamePlayHistoryId(entity.getGamePlayHistoryId())
-                .userId(Long.valueOf(entity.getUserId()))
+                .userId(entity.getUserId())
                 .musicId(entity.getMusicId())
                 .completionRate(entity.getCompletionRate())
                 .combo(entity.getCombo())

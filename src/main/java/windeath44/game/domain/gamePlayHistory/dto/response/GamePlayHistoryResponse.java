@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 public class GamePlayHistoryResponse {
     
     private Long gamePlayHistoryId;
-    private Long userId; // 사용자 ID
+    private String userId;
     private Long musicId;
     private float completionRate;
     private long combo;

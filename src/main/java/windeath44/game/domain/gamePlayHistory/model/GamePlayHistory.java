@@ -31,6 +31,7 @@ public class GamePlayHistory {
     private long great;
     private long good;
     private long miss;
+    @Column(name = "`rank`")
     private String rank;
     private GamePlayHistoryState state;
 
