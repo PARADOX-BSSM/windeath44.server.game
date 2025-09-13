@@ -4,19 +4,19 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import windeath44.game.domain.gamePlayHistory.event.GamePlayHistorySavedEvent;
-import windeath44.game.domain.ranking.dto.RankingRequest;
-import windeath44.game.domain.ranking.dto.RankingResponse;
+import windeath44.game.domain.ranking.dto.response.RankingResponse;
 import windeath44.game.domain.ranking.mapper.RhythmRankingMapper;
 import windeath44.game.domain.ranking.model.RhythmRanking;
+import windeath44.game.domain.ranking.dto.projection.RankingProjection;
 import windeath44.game.domain.gamePlayHistory.repository.RhythmRankingRepository;
 import windeath44.game.global.dto.CursorPage;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
 @Slf4j
 @Service
@@ -60,20 +60,17 @@ public class RankingService {
                 event.userId(), event.musicId(), event.completionRate());
     }
     
-    public CursorPage<RankingResponse> getRankingByMusicId(RankingRequest request) {
-        List<RhythmRanking> rankings = rhythmRankingRepository.findRankingByMusicIdWithCursor(
-            request.musicId(),
-            request.lastRank(),
-            request.lastUpdatedAt(),
-            PageRequest.of(0, request.size() + 1)
+    public CursorPage<RankingResponse> getRankingByMusicId(Long musicId, Long cursorRank, int size) {
+        Slice<RankingProjection> rankings = rhythmRankingRepository.findRankingByMusicIdWithCursor(
+                musicId,
+                cursorRank,
+                PageRequest.of(0, size)
         );
-        
-        AtomicLong rank = new AtomicLong(request.lastRank() != null ? request.lastRank() : 0);
-        
+
         List<RankingResponse> responses = rankings.stream()
-            .map(ranking -> RankingResponse.from(ranking, rank.incrementAndGet()))
+            .map(RankingResponse::from)
             .toList();
             
-        return CursorPage.from(request.size(), responses);
+        return CursorPage.from(size, responses);
     }
 }

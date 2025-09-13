@@ -4,8 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import windeath44.game.domain.ranking.dto.RankingRequest;
-import windeath44.game.domain.ranking.dto.RankingResponse;
+import windeath44.game.domain.ranking.dto.response.RankingResponse;
 import windeath44.game.domain.ranking.service.RankingService;
 import windeath44.game.global.dto.CursorPage;
 import windeath44.game.global.dto.ResponseDto;
@@ -20,11 +19,11 @@ public class RankingController {
     
     @GetMapping
     public ResponseEntity<ResponseDto<CursorPage<RankingResponse>>> getRankings(
-            @Valid @RequestBody RankingRequest request,
-            @RequestParam(value="cursorId", required=false) Long cursorId,
+            @RequestParam(value="musicId") Long musicId,
+            @RequestParam(value="cursorRank", required=false) Long cursorRank,
             @RequestParam(value="size", defaultValue="10") int size
     ) {
-        CursorPage<RankingResponse> rankings = rankingService.getRankingByMusicId(request);
+        CursorPage<RankingResponse> rankings = rankingService.getRankingByMusicId(musicId, cursorRank, size);
         ResponseDto<CursorPage<RankingResponse>> responseDto = HttpUtil.success("", rankings);
         return ResponseEntity.ok(responseDto);
     }

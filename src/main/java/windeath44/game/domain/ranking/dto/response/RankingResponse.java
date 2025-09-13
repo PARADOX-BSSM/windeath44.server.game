@@ -1,7 +1,8 @@
-package windeath44.game.domain.ranking.dto;
+package windeath44.game.domain.ranking.dto.response;
 
 import lombok.Builder;
 import windeath44.game.domain.ranking.model.RhythmRanking;
+import windeath44.game.domain.ranking.dto.projection.RankingProjection;
 
 import java.time.LocalDateTime;
 
@@ -23,6 +24,17 @@ public record RankingResponse(
                 .completionRate(ranking.getCompletionRate())
                 .rank(rank)
                 .updatedAt(ranking.getUpdatedAt())
+                .build();
+    }
+    
+    public static RankingResponse from(RankingProjection projection) {
+        return RankingResponse.builder()
+                .rankingId(projection.getRankingId())
+                .userId(projection.getUserId())
+                .musicId(projection.getMusicId())
+                .completionRate(projection.getCompletionRate())
+                .rank(projection.getRanking())
+                .updatedAt(projection.getUpdatedAt())
                 .build();
     }
 }
