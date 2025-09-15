@@ -8,12 +8,12 @@ import org.springframework.data.domain.Slice;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import windeath44.game.domain.gamePlayHistory.event.GamePlayHistorySavedEvent;
+import windeath44.game.domain.rhythmGamePlayHistory.event.RhythmGamePlayHistorySavedEvent;
 import windeath44.game.domain.ranking.dto.response.RankingResponse;
 import windeath44.game.domain.ranking.mapper.RhythmRankingMapper;
 import windeath44.game.domain.ranking.model.RhythmRanking;
 import windeath44.game.domain.ranking.dto.projection.RankingProjection;
-import windeath44.game.domain.gamePlayHistory.repository.RhythmRankingRepository;
+import windeath44.game.domain.rhythmGamePlayHistory.repository.RhythmRankingRepository;
 import windeath44.game.global.dto.CursorPage;
 
 import java.util.List;
@@ -30,7 +30,7 @@ public class RankingService {
     @Async
     @EventListener
     @Transactional
-    public void handleGamePlayHistorySaved(GamePlayHistorySavedEvent event) {
+    public void handleRhythmGamePlayHistorySaved(RhythmGamePlayHistorySavedEvent event) {
         log.info("Processing ranking update for userId: {}, musicId: {}", 
                 event.userId(), event.musicId());
 
@@ -41,7 +41,7 @@ public class RankingService {
                 );
     }
 
-    private void updateExistingRanking(RhythmRanking ranking, GamePlayHistorySavedEvent event) {
+    private void updateExistingRanking(RhythmRanking ranking, RhythmGamePlayHistorySavedEvent event) {
         if (ranking.getCompletionRate() < event.completionRate()) {
             RhythmRanking updatedRanking = rhythmRankingMapper.updateEntity(ranking, event);
             rhythmRankingRepository.save(updatedRanking);
@@ -53,7 +53,7 @@ public class RankingService {
         }
     }
 
-    private void createNewRanking(GamePlayHistorySavedEvent event) {
+    private void createNewRanking(RhythmGamePlayHistorySavedEvent event) {
         RhythmRanking newRanking = rhythmRankingMapper.toEntity(event);
         rhythmRankingRepository.save(newRanking);
         log.info("Created new ranking for userId: {}, musicId: {} with completion rate: {}", 

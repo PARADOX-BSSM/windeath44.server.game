@@ -1,4 +1,4 @@
-package windeath44.game.domain.gamePlayHistory.repository;
+package windeath44.game.domain.rhythmGamePlayHistory.repository;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;

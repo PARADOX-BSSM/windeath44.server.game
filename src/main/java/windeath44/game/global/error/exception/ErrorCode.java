@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Getter
 public enum ErrorCode {
-    NOT_FOUND_GAME_PLAY_HISTORY("not found game play history",404);
+    NOT_FOUND_RHYTHM_GAME_PLAY_HISTORY("not found rhythm game play history",404);
     
     private final String message;
     private final int status;

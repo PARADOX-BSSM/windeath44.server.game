@@ -1,4 +1,4 @@
-package windeath44.game.domain.gamePlayHistory.util;
+package windeath44.game.domain.rhythmGamePlayHistory.util;
 
 public class RankCalculator {
     

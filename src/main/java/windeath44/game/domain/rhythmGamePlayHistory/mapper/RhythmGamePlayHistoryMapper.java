@@ -1,26 +1,26 @@
-package windeath44.game.domain.gamePlayHistory.mapper;
+package windeath44.game.domain.rhythmGamePlayHistory.mapper;
 
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Component;
-import windeath44.game.domain.gamePlayHistory.dto.request.GamePlayHistoryRequest;
-import windeath44.game.domain.gamePlayHistory.dto.response.GamePlayHistoryResponse;
-import windeath44.game.domain.gamePlayHistory.model.GamePlayHistory;
-import windeath44.game.domain.gamePlayHistory.model.type.GamePlayHistoryState;
-import windeath44.game.domain.gamePlayHistory.util.RankCalculator;
+import windeath44.game.domain.rhythmGamePlayHistory.dto.request.RhythmGamePlayHistoryRequest;
+import windeath44.game.domain.rhythmGamePlayHistory.dto.response.RhythmGamePlayHistoryResponse;
+import windeath44.game.domain.rhythmGamePlayHistory.model.RhythmGamePlayHistory;
+import windeath44.game.domain.rhythmGamePlayHistory.model.type.RhythmGamePlayHistoryState;
+import windeath44.game.domain.rhythmGamePlayHistory.util.RankCalculator;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class GamePlayHistoryMapper {
+public class RhythmGamePlayHistoryMapper {
     
-    public GamePlayHistory toEntity(GamePlayHistoryRequest request, String userId) {
+    public RhythmGamePlayHistory toEntity(RhythmGamePlayHistoryRequest request, String userId) {
         String rank = RankCalculator.calculateRank(request.getCompletionRate());
-        GamePlayHistoryState state = (request.getState() == null || request.getState().trim().isEmpty()) 
-            ? null 
-            : GamePlayHistoryState.valueOf(request.getState());
+        RhythmGamePlayHistoryState state = (request.getState() == null || request.getState().trim().isEmpty())
+            ? null
+            : RhythmGamePlayHistoryState.valueOf(request.getState());
 
-        return GamePlayHistory.builder()
+        return RhythmGamePlayHistory.builder()
                 .userId(userId)
                 .musicId(request.getMusicId())
                 .completionRate(request.getCompletionRate())
@@ -35,8 +35,8 @@ public class GamePlayHistoryMapper {
                 .build();
     }
     
-    public GamePlayHistoryResponse toResponse(GamePlayHistory entity) {
-        return GamePlayHistoryResponse.builder()
+    public RhythmGamePlayHistoryResponse toResponse(RhythmGamePlayHistory entity) {
+        return RhythmGamePlayHistoryResponse.builder()
                 .gamePlayHistoryId(entity.getGamePlayHistoryId())
                 .userId(entity.getUserId())
                 .musicId(entity.getMusicId())
@@ -53,7 +53,7 @@ public class GamePlayHistoryMapper {
                 .build();
     }
     
-    public List<GamePlayHistoryResponse> toResponseList(Slice<GamePlayHistory> gamePlayHistorySlice) {
+    public List<RhythmGamePlayHistoryResponse> toResponseList(Slice<RhythmGamePlayHistory> gamePlayHistorySlice) {
         return gamePlayHistorySlice
                 .getContent()
                 .stream()
@@ -61,7 +61,7 @@ public class GamePlayHistoryMapper {
                 .toList();
     }
     
-    public List<GamePlayHistoryResponse> toResponseList(List<GamePlayHistory> gamePlayHistoryList) {
+    public List<RhythmGamePlayHistoryResponse> toResponseList(List<RhythmGamePlayHistory> gamePlayHistoryList) {
         return gamePlayHistoryList.stream()
                 .map(this::toResponse)
                 .toList();

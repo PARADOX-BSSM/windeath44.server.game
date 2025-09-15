@@ -1,11 +1,11 @@
-package windeath44.game.domain.gamePlayHistory.dto.response;
+package windeath44.game.domain.rhythmGamePlayHistory.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import windeath44.game.domain.gamePlayHistory.model.GamePlayHistory;
-import windeath44.game.domain.gamePlayHistory.model.type.GamePlayHistoryState;
+import windeath44.game.domain.rhythmGamePlayHistory.model.RhythmGamePlayHistory;
+import windeath44.game.domain.rhythmGamePlayHistory.model.type.RhythmGamePlayHistoryState;
 
 import java.time.LocalDateTime;
 
@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class GamePlayHistoryResponse {
+public class RhythmGamePlayHistoryResponse {
     
     private Long gamePlayHistoryId;
     private String userId;
@@ -26,7 +26,7 @@ public class GamePlayHistoryResponse {
     private long good;
     private long miss;
     private String rank;
-    private GamePlayHistoryState state;
+    private RhythmGamePlayHistoryState state;
     private LocalDateTime playedAt;
 
 }

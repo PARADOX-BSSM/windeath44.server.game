@@ -1,4 +1,4 @@
-package windeath44.game.domain.gamePlayHistory.dto.request;
+package windeath44.game.domain.rhythmGamePlayHistory.dto.request;
 
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class GamePlayHistoryRequest {
+public class RhythmGamePlayHistoryRequest {
     
     @NotNull(message = "Music ID is required") // 음악 ID는 필수입니다
     private Long musicId;

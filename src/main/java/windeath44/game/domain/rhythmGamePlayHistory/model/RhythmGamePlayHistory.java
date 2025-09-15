@@ -1,4 +1,4 @@
-package windeath44.game.domain.gamePlayHistory.model;
+package windeath44.game.domain.rhythmGamePlayHistory.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import windeath44.game.domain.gamePlayHistory.model.type.GamePlayHistoryState;
+import windeath44.game.domain.rhythmGamePlayHistory.model.type.RhythmGamePlayHistoryState;
 
 import java.time.LocalDateTime;
 
@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Getter
 @EntityListeners(AuditingEntityListener.class)
-public class GamePlayHistory {
+public class RhythmGamePlayHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long gamePlayHistoryId;
@@ -33,7 +33,7 @@ public class GamePlayHistory {
     private long miss;
     @Column(name = "`rank`")
     private String rank;
-    private GamePlayHistoryState state;
+    private RhythmGamePlayHistoryState state;
 
     @CreatedDate
     private LocalDateTime playedAt;
