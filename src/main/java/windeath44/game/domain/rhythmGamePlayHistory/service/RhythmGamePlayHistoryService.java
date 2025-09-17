@@ -18,6 +18,7 @@ import windeath44.game.global.error.exception.ErrorCode;
 import windeath44.game.global.error.exception.GlobalException;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -67,6 +68,11 @@ public class RhythmGamePlayHistoryService {
                 cursorId, PageRequest.of(0, size));
         List<RhythmGamePlayHistoryResponse> historyList = rhythmGamePlayHistoryMapper.toResponseList(historiesSlice);
         return CursorPage.from(size, historyList);
+    }
+
+    public Optional<RhythmGamePlayHistoryResponse> getBestRecord(String userId) {
+        return rhythmGamePlayHistoryRepository.findBestRecordByUserId(userId)
+                .map(rhythmGamePlayHistoryMapper::toResponse);
     }
 
 }

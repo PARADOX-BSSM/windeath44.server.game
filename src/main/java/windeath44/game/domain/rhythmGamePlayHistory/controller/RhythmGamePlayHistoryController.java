@@ -10,6 +10,8 @@ import windeath44.game.global.dto.CursorPage;
 import windeath44.game.global.dto.ResponseDto;
 import windeath44.game.global.util.HttpUtil;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/game/rhythm-game-play-history")
 @RequiredArgsConstructor
@@ -49,6 +51,18 @@ public class RhythmGamePlayHistoryController {
             @RequestParam(defaultValue = "10") int size) {
         CursorPage<RhythmGamePlayHistoryResponse> response = rhythmGamePlayHistoryService.getAllRhythmGamePlayHistories(cursor, size);
         ResponseDto<CursorPage<RhythmGamePlayHistoryResponse>> responseDto = HttpUtil.success("rhythm game play histories successfully get", response);
+        return ResponseEntity.ok(responseDto);
+    }
+
+    @GetMapping("/my/best")
+    public ResponseEntity<ResponseDto<RhythmGamePlayHistoryResponse>> getMyBestRecord(
+            @RequestHeader("user-id") String userId) {
+        Optional<RhythmGamePlayHistoryResponse> bestRecord = rhythmGamePlayHistoryService.getBestRecord(userId);
+        if (bestRecord.isEmpty()) {
+            ResponseDto<RhythmGamePlayHistoryResponse> responseDto = HttpUtil.success("no best record found");
+            return ResponseEntity.ok(responseDto);
+        }
+        ResponseDto<RhythmGamePlayHistoryResponse> responseDto = HttpUtil.success("best record successfully retrieved", bestRecord.get());
         return ResponseEntity.ok(responseDto);
     }
 }
