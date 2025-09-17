@@ -70,9 +70,11 @@ public class RhythmGamePlayHistoryService {
         return CursorPage.from(size, historyList);
     }
 
-    public Optional<RhythmGamePlayHistoryResponse> getBestRecord(String userId) {
-        return rhythmGamePlayHistoryRepository.findBestRecordByUserId(userId)
-                .map(rhythmGamePlayHistoryMapper::toResponse);
+    public RhythmGamePlayHistoryResponse getBestRecord(String userId) {
+        RhythmGamePlayHistory gamePlayHistory = rhythmGamePlayHistoryRepository.findBestRecordByUserId(userId)
+                .orElseThrow(NotFoundRhythmGamePlayHistoryException::getInstance);
+        RhythmGamePlayHistoryResponse response = rhythmGamePlayHistoryMapper.toResponse(gamePlayHistory);
+        return response;
     }
 
 }
