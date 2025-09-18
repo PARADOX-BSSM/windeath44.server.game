@@ -22,7 +22,6 @@ public class PlayerCommandService {
 
     @Async
     @EventListener
-    @Transactional
     public void handleRhythmGamePlayHistorySaved(RhythmGamePlayHistorySavedEvent event) {
         log.info("Processing player rating update for userId: {}", event.userId());
 
