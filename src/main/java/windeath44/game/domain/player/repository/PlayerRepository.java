@@ -1,0 +1,35 @@
+package windeath44.game.domain.player.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+import windeath44.game.domain.player.model.Player;
+
+import java.util.Optional;
+
+@Repository
+public interface PlayerRepository extends JpaRepository<Player, String> {
+
+    Optional<Player> findByPlayerId(String playerId);
+
+    // 유저의 최근 30개 곡별 최고 점수들의 rating 합산을 위한 쿼리
+    @Query(value = """
+        SELECT COALESCE(SUM(latest_ratings.rating), 0) as total_rating
+        FROM (
+            SELECT DISTINCT h.music_id, h.rating
+            FROM rhythm_game_play_history h
+            WHERE h.user_id = :userId
+            AND h.game_play_history_id IN (
+                SELECT MAX(h2.game_play_history_id)
+                FROM rhythm_game_play_history h2
+                WHERE h2.user_id = :userId
+                AND h2.music_id = h.music_id
+                GROUP BY h2.music_id
+            )
+            ORDER BY h.played_at DESC
+            LIMIT 30
+        ) latest_ratings
+        """, nativeQuery = true)
+    Float calculatePlayerRatingFromRecentGames(@Param("userId") String userId);
+}
