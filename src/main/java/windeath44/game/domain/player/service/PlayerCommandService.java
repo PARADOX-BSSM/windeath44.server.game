@@ -17,7 +17,6 @@ import windeath44.game.domain.player.repository.PlayerRepository;
 @RequiredArgsConstructor
 @Transactional
 public class PlayerCommandService {
-
     private final PlayerRepository playerRepository;
     private final PlayerMapper playerMapper;
 
@@ -29,7 +28,7 @@ public class PlayerCommandService {
 
         playerRepository.findByPlayerId(event.userId())
                 .ifPresentOrElse(
-                    player -> updatePlayerRating(player),
+                        this::updatePlayerRating,
                     () -> createNewPlayer(event.userId())
                 );
     }
