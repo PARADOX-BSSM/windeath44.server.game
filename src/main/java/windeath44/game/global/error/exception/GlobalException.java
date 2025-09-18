@@ -1,6 +1,10 @@
 package windeath44.game.global.error.exception;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-public class GlobalException extends RuntimeException{
-    private ErrorCode ErrorCode;
+@Getter
+@RequiredArgsConstructor
+public class GlobalException extends RuntimeException {
+    private final ErrorCode errorCode;
 }
