@@ -29,6 +29,7 @@ public class RhythmRanking {
     private String userId;
     private Long musicId;
     private float completionRate;
+    private float rating;
 
     @LastModifiedDate
     private LocalDateTime updatedAt;

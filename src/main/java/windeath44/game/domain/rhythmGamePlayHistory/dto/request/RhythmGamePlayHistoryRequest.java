@@ -21,6 +21,9 @@ public class RhythmGamePlayHistoryRequest {
     @DecimalMin(value = "0.0", message = "Completion rate must be at least 0%") // 완주율은 0% 이상이어야 합니다
     @DecimalMax(value = "100.0", message = "Completion rate cannot exceed 100%") // 완주율은 100%를 초과할 수 없습니다
     private float completionRate;
+
+    @DecimalMin(value = "0.0", message = "Rating must be at least 0") // 레이팅은 0 이상이어야 합니다
+    private float rating;
     
     @Min(value = 0, message = "Combo must be at least 0") // 콤보는 0 이상이어야 합니다
     private long combo;

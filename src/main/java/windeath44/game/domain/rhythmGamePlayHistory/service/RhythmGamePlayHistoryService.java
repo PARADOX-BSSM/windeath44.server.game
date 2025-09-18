@@ -38,6 +38,7 @@ public class RhythmGamePlayHistoryService {
             userId,
             request.getMusicId(),
             request.getCompletionRate(),
+            request.getRating(),
             request.getCombo(),
             request.getPerfectPlus(),
             request.getPerfect(),

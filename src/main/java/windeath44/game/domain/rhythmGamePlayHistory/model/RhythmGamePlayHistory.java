@@ -25,6 +25,7 @@ public class RhythmGamePlayHistory {
     private String userId;
     private Long musicId;
     private float completionRate;
+    private float rating;
     private long combo;
     private long perfectPlus;
     private long perfect;
