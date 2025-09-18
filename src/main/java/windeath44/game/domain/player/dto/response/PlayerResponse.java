@@ -15,6 +15,7 @@ public class PlayerResponse {
 
     private String playerId;
     private float rating;
+    private Long ranking;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }
