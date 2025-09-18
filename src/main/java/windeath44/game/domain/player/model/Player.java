@@ -17,7 +17,6 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @Getter
-@Setter
 @EntityListeners(AuditingEntityListener.class)
 public class Player {
     @Id
@@ -30,4 +29,8 @@ public class Player {
 
     @LastModifiedDate
     private LocalDateTime updatedAt;
+
+    public void updateRating(float rating) {
+        this.rating = rating;
+    }
 }

@@ -15,8 +15,8 @@ import windeath44.game.domain.player.repository.PlayerRepository;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
-public class PlayerService {
+@Transactional
+public class PlayerCommandService {
 
     private final PlayerRepository playerRepository;
     private final PlayerMapper playerMapper;
@@ -36,7 +36,7 @@ public class PlayerService {
 
     private void updatePlayerRating(Player player) {
         Float newRating = playerRepository.calculatePlayerRatingFromRecentGames(player.getPlayerId());
-        player.setRating(newRating != null ? newRating : 0.0f);
+        player.updateRating(newRating != null ? newRating : 0.0f);
         playerRepository.save(player);
         log.info("Updated player rating for userId: {} with new rating: {}",
                 player.getPlayerId(), player.getRating());
@@ -51,18 +51,5 @@ public class PlayerService {
         playerRepository.save(newPlayer);
         log.info("Created new player for userId: {} with rating: {}",
                 userId, newPlayer.getRating());
-    }
-
-    public PlayerResponse getPlayerRating(String playerId) {
-        Player player = playerRepository.findByPlayerId(playerId)
-                .orElseGet(() -> {
-                    Float rating = playerRepository.calculatePlayerRatingFromRecentGames(playerId);
-                    Player newPlayer = Player.builder()
-                            .playerId(playerId)
-                            .rating(rating != null ? rating : 0.0f)
-                            .build();
-                    return playerRepository.save(newPlayer);
-                });
-        return playerMapper.toResponse(player);
     }
 }
