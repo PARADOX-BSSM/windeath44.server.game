@@ -15,11 +15,11 @@ import java.util.concurrent.atomic.AtomicLong;
 public class LoggingAspect {
     private static AtomicLong count = new AtomicLong(0);
 
-    @Pointcut("execution(* windeath44.game.domain.gamePlayHistory.service.*.*(..))")
+    @Pointcut("execution(* windeath44.game.domain.rhythmGamePlayHistory.service.*.*(..))")
     public void playHisotryMethodLog() {}
-
-    @Pointcut("execution(* windeath44.game.domain.ranking.service.*.*(..))")
-    public void rankingMethodLog() {}
+//
+//    @Pointcut("execution(* windeath44.game.domain.ranking.service.*.*(..))")
+//    public void rankingMethodLog() {}
 
 
 }
