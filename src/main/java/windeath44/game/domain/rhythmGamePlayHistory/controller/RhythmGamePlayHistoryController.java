@@ -56,9 +56,11 @@ public class RhythmGamePlayHistoryController {
 
     @GetMapping("/my/best")
     public ResponseEntity<ResponseDto<RhythmGamePlayHistoryResponse>> getMyBestRecord(
-            @RequestHeader("user-id") String userId) {
-        RhythmGamePlayHistoryResponse bestRecord = rhythmGamePlayHistoryService.getBestRecord(userId);
+            @RequestHeader("user-id") String userId,
+        @RequestParam("musicId") Long musicId) {
+        RhythmGamePlayHistoryResponse bestRecord = rhythmGamePlayHistoryService.getBestRecord(userId, musicId);
         ResponseDto<RhythmGamePlayHistoryResponse> responseDto = HttpUtil.success("best record successfully retrieved", bestRecord);
         return ResponseEntity.ok(responseDto);
     }
+
 }
