@@ -25,10 +25,6 @@ public interface RhythmGamePlayHistoryRepository extends JpaRepository<RhythmGam
     Slice<RhythmGamePlayHistory> findAllWithCursor(@Param("cursorId") Long cursorId,
                                              Pageable pageable);
 
-    // 유저의 최고 기록 조회 (완료율 기준)
-    @Query("SELECT g FROM RhythmGamePlayHistory g WHERE g.userId = :userId ORDER BY g.completionRate DESC, g.combo DESC, g.perfectPlus DESC, g.perfect DESC LIMIT 1")
-    Optional<RhythmGamePlayHistory> findBestRecordByUserId(@Param("userId") String userId);
-
     // 특정 음악에 대한 유저의 최고 기록들을 집계 (병합된 최고 기록을 위함)
     @Query(value = """
         SELECT
