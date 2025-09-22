@@ -5,7 +5,7 @@ import windeath44.game.global.error.exception.GlobalException;
 
 public class NotFoundRhythmGamePlayHistoryException extends GlobalException {
     private NotFoundRhythmGamePlayHistoryException() {
-        super(ErrorCode.NOT_FOUND_GAME_PLAY_HISTORY);
+        super(ErrorCode.NOT_FOUND_RHYTHM_GAME_PLAY_HISTORY);
     }
 
     public static class Holder {

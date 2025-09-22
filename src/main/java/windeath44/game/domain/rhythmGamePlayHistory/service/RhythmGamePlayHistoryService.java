@@ -14,11 +14,8 @@ import windeath44.game.domain.rhythmGamePlayHistory.mapper.RhythmGamePlayHistory
 import windeath44.game.domain.rhythmGamePlayHistory.model.RhythmGamePlayHistory;
 import windeath44.game.domain.rhythmGamePlayHistory.repository.RhythmGamePlayHistoryRepository;
 import windeath44.game.global.dto.CursorPage;
-import windeath44.game.global.error.exception.ErrorCode;
-import windeath44.game.global.error.exception.GlobalException;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -71,11 +68,11 @@ public class RhythmGamePlayHistoryService {
         return CursorPage.from(size, historyList);
     }
 
-    public RhythmGamePlayHistoryResponse getBestRecord(String userId) {
-        RhythmGamePlayHistory gamePlayHistory = rhythmGamePlayHistoryRepository.findBestRecordByUserId(userId)
+    public RhythmGamePlayHistoryResponse getBestRecord(String userId, Long musicId) {
+        Object[] aggregatedData = rhythmGamePlayHistoryRepository.findBestMergedRecordByUserIdAndMusicId(userId, musicId)
                 .orElseThrow(NotFoundRhythmGamePlayHistoryException::getInstance);
-        RhythmGamePlayHistoryResponse response = rhythmGamePlayHistoryMapper.toResponse(gamePlayHistory);
-        return response;
+
+        return rhythmGamePlayHistoryMapper.toMergedResponse(aggregatedData);
     }
 
 }

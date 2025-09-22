@@ -34,6 +34,7 @@ public class RhythmGamePlayHistory {
     private long miss;
     @Column(name = "`rank`")
     private String rank;
+    @Enumerated(EnumType.STRING)
     private RhythmGamePlayHistoryState state;
 
     @CreatedDate
