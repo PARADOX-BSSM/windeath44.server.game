@@ -3,7 +3,9 @@ package windeath44.game.domain.rhythmGamePlayHistory.mapper;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Component;
 import windeath44.game.domain.rhythmGamePlayHistory.dto.request.RhythmGamePlayHistoryRequest;
+import windeath44.game.domain.rhythmGamePlayHistory.dto.response.BestRecordResponse;
 import windeath44.game.domain.rhythmGamePlayHistory.dto.response.RhythmGamePlayHistoryResponse;
+import windeath44.game.domain.rhythmGamePlayHistory.exception.InvalidGamePlayHistoryDataException;
 import windeath44.game.domain.rhythmGamePlayHistory.model.RhythmGamePlayHistory;
 import windeath44.game.domain.rhythmGamePlayHistory.model.type.RhythmGamePlayHistoryState;
 import windeath44.game.domain.rhythmGamePlayHistory.util.RankCalculator;
@@ -71,7 +73,7 @@ public class RhythmGamePlayHistoryMapper {
 
     public RhythmGamePlayHistoryResponse toMergedResponse(Object[] aggregatedData) {
         if (aggregatedData == null || aggregatedData.length < 11) {
-            throw new IllegalArgumentException("Invalid aggregated data");
+            throw new InvalidGamePlayHistoryDataException();
         }
 
         float completionRate = ((Number) aggregatedData[0]).floatValue();
@@ -107,15 +109,15 @@ public class RhythmGamePlayHistoryMapper {
                 .build();
     }
 
-    public List<RhythmGamePlayHistoryResponse> toMergedResponseList(List<Object[]> aggregatedDataList) {
+    public List<BestRecordResponse> toMergedResponseList(List<Object[]> aggregatedDataList) {
         return aggregatedDataList.stream()
                 .map(this::toMergedResponseFromList)
                 .toList();
     }
 
-    private RhythmGamePlayHistoryResponse toMergedResponseFromList(Object[] aggregatedData) {
-        if (aggregatedData == null || aggregatedData.length < 10) {
-            throw new IllegalArgumentException("Invalid aggregated data for list response");
+    private BestRecordResponse toMergedResponseFromList(Object[] aggregatedData) {
+        if (aggregatedData == null || aggregatedData.length < 11) {
+            throw new InvalidGamePlayHistoryDataException();
         }
 
         Long musicId = ((Number) aggregatedData[0]).longValue();
@@ -127,14 +129,13 @@ public class RhythmGamePlayHistoryMapper {
         long great = ((Number) aggregatedData[6]).longValue();
         long good = ((Number) aggregatedData[7]).longValue();
         long miss = ((Number) aggregatedData[8]).longValue();
-        String stateString = (String) aggregatedData[9];
-        String userId = (String) aggregatedData[10];
+        String stateString = aggregatedData[9] != null ? aggregatedData[9].toString() : null;
+        String userId = aggregatedData[10] != null ? aggregatedData[10].toString() : null;
 
-        RhythmGamePlayHistoryState state = RhythmGamePlayHistoryState.valueOf(stateString);
+        RhythmGamePlayHistoryState state = stateString != null ? RhythmGamePlayHistoryState.valueOf(stateString) : null;
         String rank = RankCalculator.calculateRank(completionRate);
 
-        return RhythmGamePlayHistoryResponse.builder()
-                .gamePlayHistoryId(null) // 병합된 가상 기록이므로 null
+        return BestRecordResponse.builder()
                 .userId(userId)
                 .musicId(musicId)
                 .completionRate(completionRate)
@@ -147,7 +148,6 @@ public class RhythmGamePlayHistoryMapper {
                 .miss(miss)
                 .rank(rank)
                 .state(state)
-                .playedAt(null) // 병합된 기록이므로 null
                 .build();
     }
 }

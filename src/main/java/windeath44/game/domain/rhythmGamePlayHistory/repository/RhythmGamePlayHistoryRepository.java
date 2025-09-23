@@ -74,12 +74,12 @@ public interface RhythmGamePlayHistoryRepository extends JpaRepository<RhythmGam
             :userId as user_id
         FROM rhythm_game_play_history h1
         WHERE h1.user_id = :userId
-          AND (:cursorMusicId IS NULL OR h1.music_id > :cursorMusicId)
         GROUP BY h1.music_id
+        HAVING (:cursorMusicId IS NULL OR h1.music_id > :cursorMusicId)
         ORDER BY h1.music_id ASC
-        LIMIT :size
+        LIMIT :limitSize
         """, nativeQuery = true)
     List<Object[]> findMyBestRecordsWithCursor(@Param("userId") String userId,
                                                @Param("cursorMusicId") Long cursorMusicId,
-                                               @Param("size") int size);
+                                               @Param("limitSize") int limitSize);
 }

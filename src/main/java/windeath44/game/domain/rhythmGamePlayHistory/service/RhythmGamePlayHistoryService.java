@@ -7,6 +7,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import windeath44.game.domain.rhythmGamePlayHistory.dto.request.RhythmGamePlayHistoryRequest;
+import windeath44.game.domain.rhythmGamePlayHistory.dto.response.BestRecordResponse;
 import windeath44.game.domain.rhythmGamePlayHistory.dto.response.RhythmGamePlayHistoryResponse;
 import windeath44.game.domain.rhythmGamePlayHistory.event.RhythmGamePlayHistorySavedEvent;
 import windeath44.game.domain.rhythmGamePlayHistory.exception.NotFoundRhythmGamePlayHistoryException;
@@ -75,9 +76,9 @@ public class RhythmGamePlayHistoryService {
         return rhythmGamePlayHistoryMapper.toMergedResponse(aggregatedData);
     }
 
-    public CursorPage<RhythmGamePlayHistoryResponse> getMyBestRecords(String userId, Long cursorMusicId, int size) {
-        List<Object[]> bestRecords = rhythmGamePlayHistoryRepository.findMyBestRecordsWithCursor(userId, cursorMusicId, size);
-        List<RhythmGamePlayHistoryResponse> responseList = rhythmGamePlayHistoryMapper.toMergedResponseList(bestRecords);
+    public CursorPage<BestRecordResponse> getMyBestRecords(String userId, Long cursorMusicId, int size) {
+        List<Object[]> bestRecords = rhythmGamePlayHistoryRepository.findMyBestRecordsWithCursor(userId, cursorMusicId, size + 1);
+        List<BestRecordResponse> responseList = rhythmGamePlayHistoryMapper.toMergedResponseList(bestRecords);
         return CursorPage.from(size, responseList);
     }
 
