@@ -17,22 +17,22 @@ import java.util.stream.Collectors;
 public class RhythmGamePlayHistoryMapper {
     
     public RhythmGamePlayHistory toEntity(RhythmGamePlayHistoryRequest request, String userId) {
-        String rank = RankCalculator.calculateRank(request.getCompletionRate());
-        RhythmGamePlayHistoryState state = (request.getState() == null || request.getState().trim().isEmpty())
+        String rank = RankCalculator.calculateRank(request.completionRate());
+        RhythmGamePlayHistoryState state = (request.state() == null || request.state().trim().isEmpty())
             ? null
-            : RhythmGamePlayHistoryState.valueOf(request.getState());
+            : RhythmGamePlayHistoryState.valueOf(request.state());
 
         return RhythmGamePlayHistory.builder()
                 .userId(userId)
-                .musicId(request.getMusicId())
-                .completionRate(request.getCompletionRate())
-                .rating(request.getRating())
-                .combo(request.getCombo())
-                .perfectPlus(request.getPerfectPlus())
-                .perfect(request.getPerfect())
-                .great(request.getGreat())
-                .good(request.getGood())
-                .miss(request.getMiss())
+                .musicId(request.musicId())
+                .completionRate(request.completionRate())
+                .rating(request.rating())
+                .combo(request.combo())
+                .perfectPlus(request.perfectPlus())
+                .perfect(request.perfect())
+                .great(request.great())
+                .good(request.good())
+                .miss(request.miss())
                 .rank(rank)
                 .state(state)
                 .build();

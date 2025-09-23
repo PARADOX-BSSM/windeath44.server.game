@@ -34,15 +34,15 @@ public class RhythmGamePlayHistoryService {
 
         RhythmGamePlayHistorySavedEvent event = RhythmGamePlayHistorySavedEvent.from(
             userId,
-            request.getMusicId(),
-            request.getCompletionRate(),
-            request.getRating(),
-            request.getCombo(),
-            request.getPerfectPlus(),
-            request.getPerfect(),
-            request.getGreat(),
-            request.getGood(),
-            request.getMiss()
+            request.musicId(),
+            request.completionRate(),
+            request.rating(),
+            request.combo(),
+            request.perfectPlus(),
+            request.perfect(),
+            request.great(),
+            request.good(),
+            request.miss()
         );
         
         eventPublisher.publishEvent(event);
