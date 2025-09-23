@@ -75,4 +75,10 @@ public class RhythmGamePlayHistoryService {
         return rhythmGamePlayHistoryMapper.toMergedResponse(aggregatedData);
     }
 
+    public CursorPage<RhythmGamePlayHistoryResponse> getMyBestRecords(String userId, Long cursorMusicId, int size) {
+        List<Object[]> bestRecords = rhythmGamePlayHistoryRepository.findMyBestRecordsWithCursor(userId, cursorMusicId, size);
+        List<RhythmGamePlayHistoryResponse> responseList = rhythmGamePlayHistoryMapper.toMergedResponseList(bestRecords);
+        return CursorPage.from(size, responseList);
+    }
+
 }

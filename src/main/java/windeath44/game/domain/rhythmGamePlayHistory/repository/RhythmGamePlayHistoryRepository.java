@@ -50,4 +50,36 @@ public interface RhythmGamePlayHistoryRepository extends JpaRepository<RhythmGam
         WHERE user_id = :userId AND music_id = :musicId
         """, nativeQuery = true)
     Optional<Object[]> findBestMergedRecordByUserIdAndMusicId(@Param("userId") String userId, @Param("musicId") Long musicId);
+
+    // 유저의 음악별 최고 기록들을 musicId 기준 cursor 페이지네이션으로 조회
+    @Query(value = """
+        SELECT
+            music_id,
+            MAX(completion_rate) as completion_rate,
+            MAX(rating) as rating,
+            MAX(combo) as combo,
+            MAX(perfect_plus) as perfect_plus,
+            MAX(perfect) as perfect,
+            MAX(great) as great,
+            MAX(good) as good,
+            MIN(miss) as miss,
+            (SELECT state FROM rhythm_game_play_history h2
+             WHERE h2.user_id = :userId AND h2.music_id = h1.music_id
+             ORDER BY CASE
+                WHEN h2.state = 'ALL_PERFECT' THEN 3
+                WHEN h2.state = 'FULL_COMBO' THEN 2
+                WHEN h2.state = 'CLEAR' THEN 1
+                ELSE 0
+             END DESC LIMIT 1) as best_state,
+            :userId as user_id
+        FROM rhythm_game_play_history h1
+        WHERE h1.user_id = :userId
+          AND (:cursorMusicId IS NULL OR h1.music_id > :cursorMusicId)
+        GROUP BY h1.music_id
+        ORDER BY h1.music_id ASC
+        LIMIT :size
+        """, nativeQuery = true)
+    List<Object[]> findMyBestRecordsWithCursor(@Param("userId") String userId,
+                                               @Param("cursorMusicId") Long cursorMusicId,
+                                               @Param("size") int size);
 }

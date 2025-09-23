@@ -55,12 +55,21 @@ public class RhythmGamePlayHistoryController {
     }
 
     @GetMapping("/my/best")
-    public ResponseEntity<ResponseDto<RhythmGamePlayHistoryResponse>> getMyBestRecord(
+    public ResponseEntity<ResponseDto<CursorPage<RhythmGamePlayHistoryResponse>>> getMyBestRecords(
             @RequestHeader("user-id") String userId,
-        @RequestParam("musicId") Long musicId) {
-        RhythmGamePlayHistoryResponse bestRecord = rhythmGamePlayHistoryService.getBestRecord(userId, musicId);
-        ResponseDto<RhythmGamePlayHistoryResponse> responseDto = HttpUtil.success("best record successfully retrieved", bestRecord);
+            @RequestParam(required = false) Long cursor, // music id
+            @RequestParam(defaultValue = "10") int size) {
+        CursorPage<RhythmGamePlayHistoryResponse> bestRecords = rhythmGamePlayHistoryService.getMyBestRecords(userId, cursor, size);
+        ResponseDto<CursorPage<RhythmGamePlayHistoryResponse>> responseDto = HttpUtil.success("best records successfully retrieved", bestRecords);
         return ResponseEntity.ok(responseDto);
     }
 
+//    @GetMapping("/my/best/{musicId}")
+//    public ResponseEntity<ResponseDto<RhythmGamePlayHistoryResponse>> getMyBestRecord(
+//            @RequestHeader("user-id") String userId,
+//            @PathVariable("musicId") Long musicId) {
+//        RhythmGamePlayHistoryResponse bestRecord = rhythmGamePlayHistoryService.getBestRecord(userId, musicId);
+//        ResponseDto<RhythmGamePlayHistoryResponse> responseDto = HttpUtil.success("best record successfully retrieved", bestRecord);
+//        return ResponseEntity.ok(responseDto);
+//    }
 }
