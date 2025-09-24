@@ -20,7 +20,7 @@ public interface PlayerRepository extends JpaRepository<Player, String> {
     @Query(value = """
         SELECT COALESCE(SUM(latest_ratings.rating), 0) as total_rating
         FROM (
-            SELECT DISTINCT h.music_id, h.rating
+            SELECT h.music_id, h.rating, h.played_at
             FROM rhythm_game_play_history h
             WHERE h.user_id = :userId
             AND h.game_play_history_id IN (

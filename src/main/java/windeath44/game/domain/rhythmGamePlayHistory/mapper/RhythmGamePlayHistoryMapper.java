@@ -18,9 +18,7 @@ public class RhythmGamePlayHistoryMapper {
     
     public RhythmGamePlayHistory toEntity(RhythmGamePlayHistoryRequest request, String userId) {
         String rank = RankCalculator.calculateRank(request.completionRate());
-        RhythmGamePlayHistoryState state = (request.state() == null || request.state().trim().isEmpty())
-            ? null
-            : RhythmGamePlayHistoryState.valueOf(request.state());
+        RhythmGamePlayHistoryState state = RhythmGamePlayHistoryState.valueOf(request.state());
 
         return RhythmGamePlayHistory.builder()
                 .userId(userId)
