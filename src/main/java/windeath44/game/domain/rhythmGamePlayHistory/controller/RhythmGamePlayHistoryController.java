@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import windeath44.game.domain.rhythmGamePlayHistory.dto.request.RhythmGamePlayHistoryRequest;
+import windeath44.game.domain.rhythmGamePlayHistory.dto.response.BestRecordResponse;
 import windeath44.game.domain.rhythmGamePlayHistory.dto.response.RhythmGamePlayHistoryResponse;
 import windeath44.game.domain.rhythmGamePlayHistory.service.RhythmGamePlayHistoryService;
 import windeath44.game.global.dto.CursorPage;
@@ -55,12 +56,21 @@ public class RhythmGamePlayHistoryController {
     }
 
     @GetMapping("/my/best")
-    public ResponseEntity<ResponseDto<RhythmGamePlayHistoryResponse>> getMyBestRecord(
+    public ResponseEntity<ResponseDto<CursorPage<BestRecordResponse>>> getMyBestRecords(
             @RequestHeader("user-id") String userId,
-        @RequestParam("musicId") Long musicId) {
-        RhythmGamePlayHistoryResponse bestRecord = rhythmGamePlayHistoryService.getBestRecord(userId, musicId);
-        ResponseDto<RhythmGamePlayHistoryResponse> responseDto = HttpUtil.success("best record successfully retrieved", bestRecord);
+            @RequestParam(required = false) Long cursor, // music id
+            @RequestParam(defaultValue = "10") int size) {
+        CursorPage<BestRecordResponse> bestRecords = rhythmGamePlayHistoryService.getMyBestRecords(userId, cursor, size);
+        ResponseDto<CursorPage<BestRecordResponse>> responseDto = HttpUtil.success("best records successfully retrieved", bestRecords);
         return ResponseEntity.ok(responseDto);
     }
 
+//    @GetMapping("/my/best/{musicId}")
+//    public ResponseEntity<ResponseDto<RhythmGamePlayHistoryResponse>> getMyBestRecord(
+//            @RequestHeader("user-id") String userId,
+//            @PathVariable("musicId") Long musicId) {
+//        RhythmGamePlayHistoryResponse bestRecord = rhythmGamePlayHistoryService.getBestRecord(userId, musicId);
+//        ResponseDto<RhythmGamePlayHistoryResponse> responseDto = HttpUtil.success("best record successfully retrieved", bestRecord);
+//        return ResponseEntity.ok(responseDto);
+//    }
 }

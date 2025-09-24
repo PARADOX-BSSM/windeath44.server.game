@@ -7,6 +7,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import windeath44.game.domain.rhythmGamePlayHistory.dto.request.RhythmGamePlayHistoryRequest;
+import windeath44.game.domain.rhythmGamePlayHistory.dto.response.BestRecordResponse;
 import windeath44.game.domain.rhythmGamePlayHistory.dto.response.RhythmGamePlayHistoryResponse;
 import windeath44.game.domain.rhythmGamePlayHistory.event.RhythmGamePlayHistorySavedEvent;
 import windeath44.game.domain.rhythmGamePlayHistory.exception.NotFoundRhythmGamePlayHistoryException;
@@ -33,15 +34,15 @@ public class RhythmGamePlayHistoryService {
 
         RhythmGamePlayHistorySavedEvent event = RhythmGamePlayHistorySavedEvent.from(
             userId,
-            request.getMusicId(),
-            request.getCompletionRate(),
-            request.getRating(),
-            request.getCombo(),
-            request.getPerfectPlus(),
-            request.getPerfect(),
-            request.getGreat(),
-            request.getGood(),
-            request.getMiss()
+            request.musicId(),
+            request.completionRate(),
+            request.rating(),
+            request.combo(),
+            request.perfectPlus(),
+            request.perfect(),
+            request.great(),
+            request.good(),
+            request.miss()
         );
         
         eventPublisher.publishEvent(event);
@@ -73,6 +74,12 @@ public class RhythmGamePlayHistoryService {
                 .orElseThrow(NotFoundRhythmGamePlayHistoryException::getInstance);
 
         return rhythmGamePlayHistoryMapper.toMergedResponse(aggregatedData);
+    }
+
+    public CursorPage<BestRecordResponse> getMyBestRecords(String userId, Long cursorMusicId, int size) {
+        List<Object[]> bestRecords = rhythmGamePlayHistoryRepository.findMyBestRecordsWithCursor(userId, cursorMusicId, size + 1);
+        List<BestRecordResponse> responseList = rhythmGamePlayHistoryMapper.toMergedResponseList(bestRecords);
+        return CursorPage.from(size, responseList);
     }
 
 }
