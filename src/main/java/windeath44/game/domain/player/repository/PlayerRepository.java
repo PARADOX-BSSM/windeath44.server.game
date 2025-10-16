@@ -16,25 +16,19 @@ public interface PlayerRepository extends JpaRepository<Player, String> {
 
     Optional<Player> findByPlayerId(String playerId);
 
-    // 유저의 최근 30개 곡별 최고 점수들의 rating 합산을 위한 쿼리
     @Query(value = """
-        SELECT COALESCE(SUM(latest_ratings.rating), 0) as total_rating
-        FROM (
-            SELECT h.music_id, h.rating, h.played_at
-            FROM rhythm_game_play_history h
-            WHERE h.user_id = :userId
-            AND h.game_play_history_id IN (
-                SELECT MAX(h2.game_play_history_id)
-                FROM rhythm_game_play_history h2
-                WHERE h2.user_id = :userId
-                AND h2.music_id = h.music_id
-                GROUP BY h2.music_id
-            )
-            ORDER BY h.played_at DESC
-            LIMIT 30
-        ) latest_ratings
-        """, nativeQuery = true)
+    SELECT COALESCE(SUM(sub.rating), 0) AS total_rating
+    FROM (
+        SELECT h.music_id, MAX(h.rating) AS rating, MAX(h.played_at) AS played_at
+        FROM rhythm_game_play_history h
+        WHERE h.user_id = :userId
+        GROUP BY h.music_id
+        ORDER BY MAX(h.played_at) DESC
+        LIMIT 30
+    ) AS sub
+    """, nativeQuery = true)
     Float calculatePlayerRatingFromRecentGames(@Param("userId") String userId);
+
 
     // 전체 플레이어 랭킹 조회 (cursor 기반 페이지네이션, 순위 포함)
     @Query(value = """
