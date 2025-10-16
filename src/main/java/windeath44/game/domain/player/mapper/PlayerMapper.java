@@ -15,7 +15,6 @@ public class PlayerMapper {
         return PlayerResponse.builder()
                 .playerId(player.getPlayerId())
                 .rating(player.getRating())
-                .ranking(null) // 개별 조회시에는 순위 정보 없음
                 .createdAt(player.getCreatedAt())
                 .updatedAt(player.getUpdatedAt())
                 .build();
