@@ -50,6 +50,7 @@ public class RhythmGamePlayHistoryMapper {
                 .perfect(entity.getPerfect())
                 .great(entity.getGreat())
                 .good(entity.getGood())
+                .level(entity.getLevel())
                 .miss(entity.getMiss())
                 .rank(entity.getRank())
                 .state(entity.getState())

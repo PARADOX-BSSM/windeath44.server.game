@@ -10,6 +10,7 @@ public record RhythmGamePlayHistoryResponse(
     Long gamePlayHistoryId,
     String userId,
     Long musicId,
+    int level,
     float completionRate,
     float rating,
     long combo,
