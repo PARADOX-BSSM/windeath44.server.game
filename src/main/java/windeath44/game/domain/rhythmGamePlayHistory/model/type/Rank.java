@@ -13,11 +13,11 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Getter
 public enum Rank {
-    SSSPlus(4), //SSS+
+    SSS_PLUS(4), //SSS+
     SSS(3),
-    SSPlus(2.5F), //SS+
+    SS_PLUS(2.5F), //SS+
     SS(2),
-    SPlus(1.5F),
+    S_PLUS(1.5F),
     S(1.25F),
     AAA(1),
     AA(1),

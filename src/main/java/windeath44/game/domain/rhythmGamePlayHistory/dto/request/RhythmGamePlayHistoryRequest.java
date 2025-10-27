@@ -12,7 +12,8 @@ public record RhythmGamePlayHistoryRequest(
     @DecimalMax(value = "100.0", message = "Completion rate cannot exceed 100%") // 완주율은 100%를 초과할 수 없습니다
     float completionRate,
 
-    @Size(min = 1, max = 10, message = "level must be between 1 and 10")
+    @Min(value = 1, message = "level must be at least 1")
+    @Max(value = 10, message = "level must be at most 10")
     int level,
 
     @Min(value = 0, message = "Combo must be at least 0") // 콤보는 0 이상이어야 합니다
