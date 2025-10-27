@@ -8,7 +8,10 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import windeath44.game.domain.rhythmGamePlayHistory.util.RankCalculator;
 
+import java.util.Arrays;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Getter
@@ -31,11 +34,17 @@ public enum Rank {
 
     private final String displayName;
     private final float rankCoefficient;
+    private static final Map<String, Rank> rankMap = Arrays.stream(values())
+            .collect(Collectors.toMap(Rank::getDisplayName, Function.identity()));
+
 
     public static Rank calculate(float completionRate) {
-        return Rank.valueOf(
+        return Rank.fromString(
                 RankCalculator.calculateRank(completionRate)
         );
+    }
 
+    private static Rank fromString(String rank) {
+        return rankMap.get(rank);
     }
 }
