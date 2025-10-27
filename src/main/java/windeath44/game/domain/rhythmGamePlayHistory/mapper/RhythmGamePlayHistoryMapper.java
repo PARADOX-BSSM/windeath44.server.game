@@ -7,6 +7,7 @@ import windeath44.game.domain.rhythmGamePlayHistory.dto.response.BestRecordRespo
 import windeath44.game.domain.rhythmGamePlayHistory.dto.response.RhythmGamePlayHistoryResponse;
 import windeath44.game.domain.rhythmGamePlayHistory.exception.InvalidGamePlayHistoryDataException;
 import windeath44.game.domain.rhythmGamePlayHistory.model.RhythmGamePlayHistory;
+import windeath44.game.domain.rhythmGamePlayHistory.model.type.Rank;
 import windeath44.game.domain.rhythmGamePlayHistory.model.type.RhythmGamePlayHistoryState;
 import windeath44.game.domain.rhythmGamePlayHistory.util.RankCalculator;
 
@@ -16,26 +17,27 @@ import java.util.stream.Collectors;
 @Component
 public class RhythmGamePlayHistoryMapper {
     
-    public RhythmGamePlayHistory toEntity(RhythmGamePlayHistoryRequest request, String userId) {
-        String rank = RankCalculator.calculateRank(request.completionRate());
+    public RhythmGamePlayHistory toEntity(RhythmGamePlayHistoryRequest request, float rating, Rank rank, String userId) {
         RhythmGamePlayHistoryState state = RhythmGamePlayHistoryState.valueOf(request.state());
 
         return RhythmGamePlayHistory.builder()
                 .userId(userId)
                 .musicId(request.musicId())
                 .completionRate(request.completionRate())
-                .rating(request.rating())
+                .rating(rating)
                 .combo(request.combo())
                 .perfectPlus(request.perfectPlus())
                 .perfect(request.perfect())
                 .great(request.great())
                 .good(request.good())
                 .miss(request.miss())
+                .level(request.level())
                 .rank(rank)
                 .state(state)
+                .rating(rating)
                 .build();
     }
-    
+
     public RhythmGamePlayHistoryResponse toResponse(RhythmGamePlayHistory entity) {
         return RhythmGamePlayHistoryResponse.builder()
                 .gamePlayHistoryId(entity.getGamePlayHistoryId())

@@ -13,7 +13,9 @@ import windeath44.game.domain.rhythmGamePlayHistory.event.RhythmGamePlayHistoryS
 import windeath44.game.domain.rhythmGamePlayHistory.exception.NotFoundRhythmGamePlayHistoryException;
 import windeath44.game.domain.rhythmGamePlayHistory.mapper.RhythmGamePlayHistoryMapper;
 import windeath44.game.domain.rhythmGamePlayHistory.model.RhythmGamePlayHistory;
+import windeath44.game.domain.rhythmGamePlayHistory.model.type.Rank;
 import windeath44.game.domain.rhythmGamePlayHistory.repository.RhythmGamePlayHistoryRepository;
+import windeath44.game.domain.rhythmGamePlayHistory.util.RhythmGameRatingCalculator;
 import windeath44.game.global.dto.CursorPage;
 
 import java.util.List;
@@ -29,14 +31,17 @@ public class RhythmGamePlayHistoryService {
 
     @Transactional
     public void saveRhythmGamePlayHistory(RhythmGamePlayHistoryRequest request, String userId) {
-        RhythmGamePlayHistory rhythmGamePlayHistory = rhythmGamePlayHistoryMapper.toEntity(request, userId);
+        Rank rank = Rank.calculate(request.completionRate());
+        float rating = RhythmGameRatingCalculator.calculate(request.completionRate(), request.level(), rank);
+        RhythmGamePlayHistory rhythmGamePlayHistory = rhythmGamePlayHistoryMapper.toEntity(request, rating, rank, userId);
         rhythmGamePlayHistoryRepository.save(rhythmGamePlayHistory);
+
 
         RhythmGamePlayHistorySavedEvent event = RhythmGamePlayHistorySavedEvent.from(
             userId,
             request.musicId(),
             request.completionRate(),
-            request.rating(),
+            rating,
             request.combo(),
             request.perfectPlus(),
             request.perfect(),

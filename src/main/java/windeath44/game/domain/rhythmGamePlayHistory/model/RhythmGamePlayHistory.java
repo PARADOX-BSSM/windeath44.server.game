@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import windeath44.game.domain.rhythmGamePlayHistory.model.type.Rank;
 import windeath44.game.domain.rhythmGamePlayHistory.model.type.RhythmGamePlayHistoryState;
 
 import java.time.LocalDateTime;
@@ -21,9 +22,11 @@ public class RhythmGamePlayHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long gamePlayHistoryId;
-    
+
     private String userId;
     private Long musicId;
+
+    private int level;
     private float completionRate;
     private float rating;
     private long combo;
@@ -33,11 +36,17 @@ public class RhythmGamePlayHistory {
     private long good;
     private long miss;
     @Column(name = "`rank`")
-    private String rank;
+    @Enumerated(EnumType.STRING)
+    private Rank rank;
     @Enumerated(EnumType.STRING)
     private RhythmGamePlayHistoryState state;
 
     @CreatedDate
     private LocalDateTime playedAt;
+
+
+    public String getRank() {
+        return this.rank.toString();
+    }
     
 }

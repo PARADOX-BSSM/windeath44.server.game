@@ -1,9 +1,6 @@
 package windeath44.game.domain.rhythmGamePlayHistory.dto.request;
 
-import jakarta.validation.constraints.DecimalMax;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import lombok.Builder;
 
 @Builder
@@ -15,8 +12,8 @@ public record RhythmGamePlayHistoryRequest(
     @DecimalMax(value = "100.0", message = "Completion rate cannot exceed 100%") // 완주율은 100%를 초과할 수 없습니다
     float completionRate,
 
-    @DecimalMin(value = "0.0", message = "Rating must be at least 0") // 레이팅은 0 이상이어야 합니다
-    float rating,
+    @Size(min = 1, max = 10, message = "level must be between 1 and 10")
+    int level,
 
     @Min(value = 0, message = "Combo must be at least 0") // 콤보는 0 이상이어야 합니다
     long combo,
