@@ -13,22 +13,23 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Getter
 public enum Rank {
-    SSS_PLUS(4), //SSS+
-    SSS(3),
-    SS_PLUS(2.5F), //SS+
-    SS(2),
-    S_PLUS(1.5F),
-    S(1.25F),
-    AAA(1),
-    AA(1),
-    A(1),
-    BBB(1),
-    BB(1),
-    B(1),
-    C(1),
-    D(1)
+    SSS_PLUS("SSS+", 4), //SSS+
+    SSS("SSS", 3),
+    SS_PLUS("SS+", 2.5F), //SS+
+    SS("SS", 2),
+    S_PLUS("S+", 1.5F),
+    S("S",1.25F),
+    AAA("AAA", 1),
+    AA("AA", 1),
+    A("A", 1),
+    BBB("BBB", 1),
+    BB("BB", 1),
+    B("B", 1),
+    C("C", 1),
+    D("D", 1)
     ;
 
+    private final String displayName;
     private final float rankCoefficient;
 
     public static Rank calculate(float completionRate) {

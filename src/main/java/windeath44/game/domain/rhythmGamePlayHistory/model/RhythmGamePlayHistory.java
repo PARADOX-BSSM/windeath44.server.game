@@ -46,7 +46,8 @@ public class RhythmGamePlayHistory {
 
 
     public String getRank() {
-        return this.rank.toString();
+        return this.rank.getDisplayName();
     }
     
 }
+
