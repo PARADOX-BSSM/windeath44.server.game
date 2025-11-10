@@ -1,6 +1,6 @@
 spring:
   application:
-    name: anime
+    name: game
   datasource:
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}

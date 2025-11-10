@@ -3,14 +3,10 @@ package windeath44.game.domain.rhythmGamePlayHistory.dto.response;
 import lombok.Builder;
 import windeath44.game.domain.rhythmGamePlayHistory.model.type.RhythmGamePlayHistoryState;
 
-import java.time.LocalDateTime;
-
 @Builder
-public record RhythmGamePlayHistoryResponse(
-    Long gamePlayHistoryId,
+public record BestRecordResponse(
     String userId,
     Long musicId,
-    int level,
     float completionRate,
     float rating,
     long combo,
@@ -20,6 +16,5 @@ public record RhythmGamePlayHistoryResponse(
     long good,
     long miss,
     String rank,
-    RhythmGamePlayHistoryState state,
-    LocalDateTime playedAt
+    RhythmGamePlayHistoryState state
 ) {}

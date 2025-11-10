@@ -12,6 +12,7 @@ public class RhythmRankingMapper {
                 .userId(String.valueOf(event.userId()))
                 .musicId(event.musicId())
                 .completionRate(event.completionRate())
+                .rating(event.rating())
                 .build();
     }
     
@@ -21,6 +22,7 @@ public class RhythmRankingMapper {
                 .userId(existingRanking.getUserId())
                 .musicId(existingRanking.getMusicId())
                 .completionRate(event.completionRate())
+                .rating(event.rating())
                 .build();
     }
 }

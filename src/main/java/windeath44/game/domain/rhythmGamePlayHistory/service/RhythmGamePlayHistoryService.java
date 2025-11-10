@@ -7,15 +7,16 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import windeath44.game.domain.rhythmGamePlayHistory.dto.request.RhythmGamePlayHistoryRequest;
+import windeath44.game.domain.rhythmGamePlayHistory.dto.response.BestRecordResponse;
 import windeath44.game.domain.rhythmGamePlayHistory.dto.response.RhythmGamePlayHistoryResponse;
 import windeath44.game.domain.rhythmGamePlayHistory.event.RhythmGamePlayHistorySavedEvent;
 import windeath44.game.domain.rhythmGamePlayHistory.exception.NotFoundRhythmGamePlayHistoryException;
 import windeath44.game.domain.rhythmGamePlayHistory.mapper.RhythmGamePlayHistoryMapper;
 import windeath44.game.domain.rhythmGamePlayHistory.model.RhythmGamePlayHistory;
+import windeath44.game.domain.rhythmGamePlayHistory.model.type.Rank;
 import windeath44.game.domain.rhythmGamePlayHistory.repository.RhythmGamePlayHistoryRepository;
+import windeath44.game.domain.rhythmGamePlayHistory.util.RhythmGameRatingCalculator;
 import windeath44.game.global.dto.CursorPage;
-import windeath44.game.global.error.exception.ErrorCode;
-import windeath44.game.global.error.exception.GlobalException;
 
 import java.util.List;
 
@@ -30,19 +31,23 @@ public class RhythmGamePlayHistoryService {
 
     @Transactional
     public void saveRhythmGamePlayHistory(RhythmGamePlayHistoryRequest request, String userId) {
-        RhythmGamePlayHistory rhythmGamePlayHistory = rhythmGamePlayHistoryMapper.toEntity(request, userId);
+        Rank rank = Rank.calculate(request.completionRate());
+        float rating = RhythmGameRatingCalculator.calculate(request.completionRate(), request.level(), rank);
+        RhythmGamePlayHistory rhythmGamePlayHistory = rhythmGamePlayHistoryMapper.toEntity(request, rating, rank, userId);
         rhythmGamePlayHistoryRepository.save(rhythmGamePlayHistory);
+
 
         RhythmGamePlayHistorySavedEvent event = RhythmGamePlayHistorySavedEvent.from(
             userId,
-            request.getMusicId(),
-            request.getCompletionRate(),
-            request.getCombo(),
-            request.getPerfectPlus(),
-            request.getPerfect(),
-            request.getGreat(),
-            request.getGood(),
-            request.getMiss()
+            request.musicId(),
+            request.completionRate(),
+            rating,
+            request.combo(),
+            request.perfectPlus(),
+            request.perfect(),
+            request.great(),
+            request.good(),
+            request.miss()
         );
         
         eventPublisher.publishEvent(event);
@@ -67,6 +72,19 @@ public class RhythmGamePlayHistoryService {
                 cursorId, PageRequest.of(0, size));
         List<RhythmGamePlayHistoryResponse> historyList = rhythmGamePlayHistoryMapper.toResponseList(historiesSlice);
         return CursorPage.from(size, historyList);
+    }
+
+    public RhythmGamePlayHistoryResponse getBestRecord(String userId, Long musicId) {
+        Object[] aggregatedData = rhythmGamePlayHistoryRepository.findBestMergedRecordByUserIdAndMusicId(userId, musicId)
+                .orElseThrow(NotFoundRhythmGamePlayHistoryException::getInstance);
+
+        return rhythmGamePlayHistoryMapper.toMergedResponse(aggregatedData);
+    }
+
+    public CursorPage<BestRecordResponse> getMyBestRecords(String userId, Long cursorMusicId, int size) {
+        List<Object[]> bestRecords = rhythmGamePlayHistoryRepository.findMyBestRecordsWithCursor(userId, cursorMusicId, size + 1);
+        List<BestRecordResponse> responseList = rhythmGamePlayHistoryMapper.toMergedResponseList(bestRecords);
+        return CursorPage.from(size, responseList);
     }
 
 }

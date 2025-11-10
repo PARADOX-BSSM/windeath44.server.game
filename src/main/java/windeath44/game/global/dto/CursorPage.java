@@ -12,7 +12,8 @@ public record CursorPage<T> (
 
     public static <T> CursorPage<T> from(int size, List<T> data) {
         boolean hasNext = data.size() > size;
-        return new CursorPage<>(data, hasNext);
+        List<T> values = hasNext ? data.subList(0, size) : data;
+        return new CursorPage<>(values, hasNext);
     }
 
 }

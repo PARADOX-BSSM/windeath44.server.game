@@ -1,4 +1,4 @@
-package windeath44.game.domain.ranking.model;
+package windeath44.game.domain.player.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -12,26 +12,25 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
-
-
 @Entity
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
 @Getter
-@Setter
 @EntityListeners(AuditingEntityListener.class)
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"userId", "musicId"}))
-public class RhythmRanking {
+public class Player {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long rankingId;
-    private String userId;
-    private Long musicId;
-    private float completionRate;
+    private String playerId;
+
     private float rating;
+
+    @CreatedDate
+    private LocalDateTime createdAt;
 
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
+    public void updateRating(float rating) {
+        this.rating = rating;
+    }
 }
